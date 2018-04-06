@@ -1,0 +1,79 @@
+<wizard navBarLayout="large-empty-symbols">
+  <wizard-step stepTitle="Basic Info" navigationSymbol="&#xf129;" navigationSymbolFontFamily="FontAwesome">
+    <div class="centered-content">
+      <div>
+        TODO: Enter basic information
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+      </div>
+    </div>
+  </wizard-step>
+  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome">
+    <div class="centered-content">
+      <div>
+        TODO: Query basic administrative data and show it here
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" previousStep>Back</button>
+        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+      </div>
+    </div>
+  </wizard-step>
+  <wizard-step stepTitle="Analyse Data" navigationSymbol="&#xf093;" navigationSymbolFontFamily="FontAwesome">
+    <div class="centered-content">
+      <div>
+        TODO: Create a drop down / possibility to upload.
+        Files should be shown in a table.
+        The mime-type and the size has to be detected.
+        For each file: Let the user decide if its input or output and if the expected amount of data of this type.
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" previousStep>Back</button>
+        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+      </div>
+    </div>
+  </wizard-step>
+
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome">
+    <div class="centered-content">
+      <div>
+        TODO: Recomment open access repository for the OUTPUTS.
+        Use OpenDOAR API (takes mime-type of output + location of the user).
+        User should choose from up to 3 suggested repos based on location (f.e. Austria: Prefer Austrian / European repos).
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" previousStep>Back</button>
+        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+      </div>
+    </div>
+  </wizard-step>
+  <wizard-step stepTitle="License" navigationSymbol="&#xf085;" navigationSymbolFontFamily="FontAwesome">
+    <div class="centered-content">
+      <div>
+        TODO: Use EUDAT license selector (https://github.com/ufal/public-license-selector) to decide on a license
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" previousStep>Back</button>
+        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+      </div>
+    </div>
+  </wizard-step>
+  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome">
+    <div class="centered-content">
+      <div>
+        TODO: Generate a PDF (humand readable) and a JSON-LD (machine-actionable) DMP and provide it as download.
+      </div>
+
+      <div class="btn-group">
+        <button type="button" class="btn btn-secondary" previousStep>Back</button>
+        <button type="button" class="btn btn-secondary" resetWizard>Reset</button>
+      </div>
+    </div>
+  </wizard-step>
+</wizard>

@@ -1,0 +1,10 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~font-awesome/css/font-awesome.css';
+@import '~bootstrap/dist/css/bootstrap.css';
+
+html, body {
+  margin: 0 auto;
+  padding: 0 auto;
+  height: 100%;
+  width: 100%;
+}
