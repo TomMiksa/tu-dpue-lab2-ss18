@@ -8,3 +8,10 @@ html, body {
   height: 100%;
   width: 100%;
 }
+
+.files-drop-zone {
+  border: dotted 3px lightgray;
+  height: 90px;
+  line-height: 90px;
+  text-align: center;
+}

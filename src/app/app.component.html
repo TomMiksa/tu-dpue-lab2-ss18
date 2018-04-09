@@ -1,79 +1,142 @@
 <wizard navBarLayout="large-empty-symbols">
+
+  <!-- Basic Information: Enter name -->
   <wizard-step stepTitle="Basic Info" navigationSymbol="&#xf129;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
       <div>
-        TODO: Enter basic information
-      </div>
+        <form #basicInfoForm="ngForm" class="form-horizontal">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel">
+            <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+              Name is required
+            </div>
+          </div>
 
-      <div class="btn-group">
-        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+          <button type="submit" class="btn btn-secondary" [disabled]="!basicInfoForm.form.valid" nextStep>Next</button>
+        </form>
       </div>
     </div>
   </wizard-step>
-  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome">
+
+
+
+  <!-- TISS Administrative Data -->
+  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchTissData($event)">
     <div class="centered-content">
       <div>
-        TODO: Query basic administrative data and show it here
+        TODO: <br>
+        - Query basic administrative data and show it here
       </div>
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
+
+
+
+  <!-- Analyse Data: Allow analyse sample data (upload, analyze metadata, define if it's input or output) -->
   <wizard-step stepTitle="Analyse Data" navigationSymbol="&#xf093;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
       <div>
-        TODO: Create a drop down / possibility to upload.
-        Files should be shown in a table.
-        The mime-type and the size has to be detected.
-        For each file: Let the user decide if its input or output and if the expected amount of data of this type.
+        TODO: <br>
+        - Create a drop down / possibility to upload.<br>
+        - Files should be shown in a table.<br>
+        - The mime-type and the size has to be detected.<br>
+        - For each file: Let the user decide if its input or output and if the expected amount of data of this type.
+      </div>
+
+      <!-- TODO: Style this drop area a bit -->
+      <div ngfDrop selectable="1" multiple="1"
+           (filesChange)="addSampleFiles($event)" class="well files-drop-zone" >
+        Drop your files here or click to open file chooser.
+      </div>
+      <div>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>MimeType</th>
+            <th>Size</th>
+            <th>Input/Output</th>
+            <th>Amount</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let file of model.files; let i=index">
+              <td><strong>{{ file.name }}</strong></td>
+              <td>{{ file.mimeType }}</td>
+              <td>{{ file.size }}</td>
+              <!-- TODO: add a combo-box (which modifies the model) here -->
+              <td>{{ file.ioType }}</td>
+              <!-- TODO: add a number input (which modifies the model) here -->
+              <td>{{ file.amount }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
 
-  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome">
+
+
+  <!-- Repository: Select a repository based on the location and the previously entered output data -->
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories($event)">
     <div class="centered-content">
       <div>
-        TODO: Recomment open access repository for the OUTPUTS.
-        Use OpenDOAR API (takes mime-type of output + location of the user).
-        User should choose from up to 3 suggested repos based on location (f.e. Austria: Prefer Austrian / European repos).
+        TODO: <br>
+        - Recommend open access repository for the OUTPUTS.<br>
+        - Use OpenDOAR API (takes mime-type of output + location of the user).<br>
+        - User should choose from up to 3 suggested repos based on location (f.e. Austria: Prefer Austrian / European repos).
       </div>
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
+
+
+
+  <!-- License: Select a license using the EUDAT license selector -->
   <wizard-step stepTitle="License" navigationSymbol="&#xf085;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
       <div>
-        TODO: Use EUDAT license selector (https://github.com/ufal/public-license-selector) to decide on a license
+        TODO: <br>
+        - Use EUDAT license selector (https://github.com/ufal/public-license-selector) to decide on a license
       </div>
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary" nextStep>Continue</button>
+        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
-  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome">
+
+
+
+  <!-- Generate DMP: Download the generated PDF- and JSON-LD-DMP -->
+  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp($event)">
     <div class="centered-content">
       <div>
-        TODO: Generate a PDF (humand readable) and a JSON-LD (machine-actionable) DMP and provide it as download.
+        TODO: <br>
+        - Generate a PDF (human readable) and a JSON-LD (machine-actionable) DMP and provide it as download.
       </div>
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary" resetWizard>Reset</button>
+        <button type="button" class="btn btn-secondary" resetWizard>Restart</button>
       </div>
     </div>
   </wizard-step>
+
 </wizard>
