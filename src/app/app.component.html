@@ -31,7 +31,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -41,15 +41,6 @@
   <!-- Analyse Data: Allow analyse sample data (upload, analyze metadata, define if it's input or output) -->
   <wizard-step stepTitle="Analyse Data" navigationSymbol="&#xf093;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
-      <div>
-        TODO: <br>
-        - Create a drop down / possibility to upload.<br>
-        - Files should be shown in a table.<br>
-        - The mime-type and the size has to be detected.<br>
-        - For each file: Let the user decide if its input or output and if the expected amount of data of this type.
-      </div>
-
-      <!-- TODO: Style this drop area a bit -->
       <div ngfDrop selectable="1" multiple="1"
            (filesChange)="addSampleFiles($event)" class="well files-drop-zone" >
         Drop your files here or click to open file chooser.
@@ -66,14 +57,12 @@
           </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let file of model.files; let i=index">
-              <td><strong>{{ file.name }}</strong></td>
+            <tr *ngFor="let file of model.files; let i=index" class="form-group">
+              <td align="left"><strong>{{ file.file.name }}</strong></td>
               <td>{{ file.mimeType }}</td>
-              <td>{{ file.size }}</td>
-              <!-- TODO: add a combo-box (which modifies the model) here -->
-              <td>{{ file.ioType }}</td>
-              <!-- TODO: add a number input (which modifies the model) here -->
-              <td>{{ file.amount }}</td>
+              <td>{{ file.file.size | filesize }}</td>
+              <td><select class="form-control" [(ngModel)]="file.ioType"><option value="input">Input</option><option value="output">Output</option></select></td>
+              <td><input class="form-control" type="number" name="amount" placeholder="1" [(ngModel)]="file.amount"></td>
             </tr>
           </tbody>
         </table>
@@ -81,7 +70,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" [disabled]="!model.files.length > 0" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -100,7 +89,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -117,7 +106,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary active" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -134,7 +123,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="button" class="btn btn-secondary" resetWizard>Restart</button>
+        <button type="submit" class="btn btn-secondary" resetWizard>Restart</button>
       </div>
     </div>
   </wizard-step>

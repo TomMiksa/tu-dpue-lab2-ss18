@@ -3,15 +3,8 @@
 @import '~bootstrap/dist/css/bootstrap.css';
 
 html, body {
-  margin: 0 auto;
+  margin: 20px auto 0;
   padding: 0 auto;
   height: 100%;
-  width: 100%;
-}
-
-.files-drop-zone {
-  border: dotted 3px lightgray;
-  height: 90px;
-  line-height: 90px;
-  text-align: center;
+  width: 95%;
 }

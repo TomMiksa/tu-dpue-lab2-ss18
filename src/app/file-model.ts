@@ -1,8 +1,7 @@
 export class FileModel {
   constructor(
-    public name: String,
+    public file: File,
     public mimeType: String,
-    public size: number,
     public ioType: 'input' | 'output',
     public amount: number
   ) {}

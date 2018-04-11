@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 
 import { ArchwizardModule } from 'ng2-archwizard';
 import {ngfModule} from 'angular-file';
+import {FileSizeModule} from 'ngx-filesize';
 
 
 @NgModule({
@@ -16,6 +17,7 @@ import {ngfModule} from 'angular-file';
     BrowserModule,
     FormsModule,
     ngfModule,
+    FileSizeModule,
     ArchwizardModule.forRoot() ],
   providers: [],
   bootstrap: [AppComponent]
