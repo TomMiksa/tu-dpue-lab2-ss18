@@ -1,17 +1,18 @@
 <wizard navBarLayout="large-empty-symbols">
 
   <!-- Basic Information: Enter name -->
-  <wizard-step stepTitle="Basic Info" navigationSymbol="&#xf129;" navigationSymbolFontFamily="FontAwesome">
+  <wizard-step stepTitle="Name of Project" navigationSymbol="&#xf129;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
       <div>
         <form #basicInfoForm="ngForm" class="form-horizontal">
           <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">Name of Project</label>
             <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel">
             <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
               Name is required
             </div>
           </div>
+
 
           <button type="submit" class="btn btn-secondary" [disabled]="!basicInfoForm.form.valid" nextStep>Next</button>
         </form>
@@ -21,8 +22,9 @@
 
 
 
+
   <!-- TISS Administrative Data -->
-  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchTissData()">
+  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchTissData($event)">
     <div class="centered-content">
       <div>
         TODO: <br>
@@ -78,7 +80,7 @@
 
 
   <!-- Repository: Select a repository based on the location and the previously entered output data -->
-  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories()">
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories($event)">
     <div class="centered-content">
       <div>
         TODO: <br>
@@ -114,7 +116,7 @@
 
 
   <!-- Generate DMP: Download the generated PDF- and JSON-LD-DMP -->
-  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp()">
+  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp($event)">
     <div class="centered-content">
       <div>
         TODO: <br>
@@ -122,8 +124,10 @@
       </div>
 
       <div class="btn-group">
-        <button type="button" class="btn btn-secondary" previousStep>Back</button>
         <button type="submit" class="btn btn-secondary" resetWizard>Restart</button>
+        <button type="button" class="btn btn-secondary" previousStep>Back</button>
+        <button type="submit" class="btn btn-secondary" generatePDF>GeneratePDF</button>
+
       </div>
     </div>
   </wizard-step>

@@ -1,15 +1,23 @@
 import { Component } from '@angular/core';
+import * as pdfMake from 'pdfmake/build/pdfmake';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import {DmpModel} from './dmp-model';
 import {FileModel} from './file-model';
 import * as FileType from 'file-type';
 import { Location } from '@angular/common';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
+
 })
 export class AppComponent {
+  constructor(){
+    //called first time before the ngOnInit()
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+  }
   model: DmpModel = new DmpModel();
 
 
@@ -61,5 +69,7 @@ export class AppComponent {
   public generateDmp() {
     // TODO generate the two DMPs here
     console.log('We should generate the DMPs here so that they can be displayed / downloaded...');
+    var docDefinition = { content: 'This is an sample PDF printed with pdfMake' };
+    pdfMake.createPdf(docDefinition).download(this.model.name + 'DMP');
   }
 }
