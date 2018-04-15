@@ -22,7 +22,7 @@
 
 
   <!-- TISS Administrative Data -->
-  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchTissData($event)">
+  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchTissData()">
     <div class="centered-content">
       <div>
         TODO: <br>
@@ -70,7 +70,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="submit" class="btn btn-secondary active" [disabled]="!model.files.length > 0" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" [disabled]="!(model.files.length > 0)" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -78,7 +78,7 @@
 
 
   <!-- Repository: Select a repository based on the location and the previously entered output data -->
-  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories($event)">
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories()">
     <div class="centered-content">
       <div>
         TODO: <br>
@@ -114,7 +114,7 @@
 
 
   <!-- Generate DMP: Download the generated PDF- and JSON-LD-DMP -->
-  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp($event)">
+  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp()">
     <div class="centered-content">
       <div>
         TODO: <br>
