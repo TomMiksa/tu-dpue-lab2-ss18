@@ -69,7 +69,75 @@ export class AppComponent {
   public generateDmp() {
     // TODO generate the two DMPs here
     console.log('We should generate the DMPs here so that they can be displayed / downloaded...');
-    var docDefinition = { content: 'This is an sample PDF printed with pdfMake' };
-    pdfMake.createPdf(docDefinition).download(this.model.name + 'DMP');
+    var definitionDMP = {
+      footer: function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; },
+      content: [
+        {text: this.model.name, style: 'header'},
+        {
+          text: [
+            {text: 'Administrative Data:', style: 'subheader'}
+          ]
+        },
+        'This is a sample text',
+        // TODO: Fill in administrative data
+        {
+          text: [
+            {text: 'Data used:', style: 'subheader'},
+          ],
+        },
+        'This is an overview of the data used in the project:',
+        {
+          table: {
+            headerRows: 1,
+            widths: [ '*', 'auto', 100, '*' ],
+            // TODO: Fill in more than one row
+
+            body: [
+              [ 'MimeType', 'Amount', 'Size', 'Total Size' ],
+              [this.model.files[0].mimeType,  this.model.files[0].amount, this.model.files[0].file.size + ' Byte', (this.model.files[0].file.size * this.model.files[0].amount) + ' Byte'],
+            ]
+          }
+        },
+        {
+          text: [
+            {text: 'Repositories:', style: 'subheader'},
+          ]
+        },
+        'This is a sample text',
+        // TODO: Fill in repositories
+
+        {
+          text: [
+            {text: 'License:', style: 'subheader'},
+          ]
+        },
+        'This is a sample text'
+        // TODO: Fill in license
+
+      ],
+
+      styles: {
+        header: {
+          fontSize: 25,
+          bold: true
+        },
+        subheader: {
+          fontSize: 18,
+          bold: true
+        },
+        quote: {
+          italics: true
+        },
+        small: {
+          fontSize: 8
+        }
+      }
+
+    }
+    var definitionMADMP = {content:
+      'This is an sample PDF printed with pdfMake' };
+    pdfMake.createPdf(definitionDMP).download(this.model.name + 'DMP');
+    pdfMake.createPdf(definitionMADMP).download(this.model.name + 'MachineActionableDMP');
+
   }
 }
