@@ -1,19 +1,26 @@
 <wizard navBarLayout="large-empty-symbols">
 
-  <!-- Basic Information: Enter name -->
-  <wizard-step stepTitle="Name of Project" navigationSymbol="&#xf129;" navigationSymbolFontFamily="FontAwesome">
+  <!-- Basic Information: Enter projectName -->
+  <wizard-step stepTitle="Basic Info" navigationSymbol="&#xf129;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
       <div>
         <form #basicInfoForm="ngForm" class="form-horizontal">
           <div class="form-group">
-            <label for="name">Name of Project</label>
-            <input type="text" class="form-control" id="name" required [(ngModel)]="model.name" name="name" #name="ngModel">
-            <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
-              Name is required
+            <div class="form-row">
+              <label for="researcherName">Name of the researcher</label>
+              <input type="text" class="form-control" id="researcherName" required [(ngModel)]="model.researcherName" name="researcherName" #researcherName="ngModel">
+              <div [hidden]="researcherName.valid || researcherName.pristine" class="alert alert-danger">
+                Researcher name is required
+              </div>
+            </div>
+            <div class="form-row">
+              <label for="projectName">Name of the project</label>
+              <input type="text" class="form-control" id="projectName" required [(ngModel)]="model.projectName" name="projectName" #projectName="ngModel">
+              <div [hidden]="projectName.valid || projectName.pristine" class="alert alert-danger">
+                Project name is required
+              </div>
             </div>
           </div>
-
-
           <button type="submit" class="btn btn-secondary" [disabled]="!basicInfoForm.form.valid" nextStep>Next</button>
         </form>
       </div>
