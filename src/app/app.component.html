@@ -8,8 +8,11 @@
           <div class="form-group">
             <div class="form-row">
               <label for="researcherName">Name of the researcher</label>
-              <input type="text" class="form-control" id="researcherName" required [(ngModel)]="model.researcherName" name="researcherName" #researcherName="ngModel">
-              <div [hidden]="researcherName.valid || researcherName.pristine" class="alert alert-danger">
+              <input type="text" class="form-control" id="researcherName" required [(ngModel)]="model.researcherName" name="researcherName" #researcherName="ngModel" placeholder="Best results with <Lastname> <Firstname>">
+              <div *ngIf="!researcherName.valid && !researcherName.pristine && researcherName.errors.notFound" class="alert alert-danger">
+                Researcher could not be found in TISS.
+              </div>
+              <div *ngIf="!researcherName.valid && !researcherName.pristine && researcherName.errors.required" class="alert alert-danger">
                 Researcher name is required
               </div>
             </div>
@@ -31,7 +34,7 @@
 
 
   <!-- TISS Administrative Data -->
-  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchTissData($event)">
+  <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" [canEnter]="fetchTissData">
     <div class="centered-content">
       <div>
         TODO: <br>

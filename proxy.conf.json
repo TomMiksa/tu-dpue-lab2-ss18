@@ -1,0 +1,18 @@
+{
+  "/tiss": {
+    "target": "https://tiss.tuwien.ac.at/api",
+    "secure": true,
+    "pathRewrite": {
+      "^/tiss": ""
+    },
+    "changeOrigin": true
+  },
+  "/opendoar": {
+    "target": "http://www.opendoar.org",
+    "secure": false,
+    "pathRewrite": {
+      "^/opendoar": "/api13.php"
+    },
+    "changeOrigin": true
+  }
+}

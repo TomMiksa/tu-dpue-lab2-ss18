@@ -7,6 +7,9 @@ import { AppComponent } from './app.component';
 import { ArchwizardModule } from 'ng2-archwizard';
 import {ngfModule} from 'angular-file';
 import {FileSizeModule} from 'ngx-filesize';
+import {HttpClientModule} from '@angular/common/http';
+import {TissService} from './tiss.service';
+import {OpenDoarService} from './opendoar.service';
 
 
 @NgModule({
@@ -18,8 +21,12 @@ import {FileSizeModule} from 'ngx-filesize';
     FormsModule,
     ngfModule,
     FileSizeModule,
+    HttpClientModule,
     ArchwizardModule.forRoot() ],
-  providers: [],
+  providers: [
+    TissService,
+    OpenDoarService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
