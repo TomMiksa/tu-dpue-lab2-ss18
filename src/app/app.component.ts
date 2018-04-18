@@ -10,6 +10,7 @@ import {OpenDoarService} from './opendoar.service';
 import {MovingDirection} from 'ng2-archwizard';
 import {ResearcherModel} from './researcher.model';
 import {NgModel} from '@angular/forms';
+import {RepoModel} from "./repo.model";
 
 @Component({
   selector: 'app-root',
@@ -38,6 +39,7 @@ export class AppComponent {
           console.log('TISS data successfully fetched and stored in the model!');
           console.log(value);
           this.model.tissSearchResult = value;
+          this.model.selectedTissResearcher = value.length > 0 ? value[0] : undefined;
           resolve(true);
         }).catch((text) => {
           this.researcherNameField.control.setErrors({'notFound': 'Researcher could not be found in TISS.'});
@@ -47,41 +49,56 @@ export class AppComponent {
     }
   }
 
-  public addSampleFiles(files: File[]) {
-    for (const file of files) {
-      // make sure the file is not yet contained
-      if (this.model.files.find(existingFileModel => existingFileModel.file.name === file.name)) {
-        continue;
+  public addFileSample(file: File, ioType: 'input' | 'output') {
+    console.log(file);
+    // detect the file-type based on the first 4100 bytes
+    // @see https://github.com/sindresorhus/file-type
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const fileType = FileType(reader.result);
+      let mimeType;
+      if (fileType === null || fileType.mime === null) {
+        console.log('No magic numbers found for file ' + file.name);
+        // if we cannot find any magic numbers, we'll try to determine the mime type based on the file extension
+        const extensionType = lookup(file.name);
+        if (extensionType) {
+          mimeType = extensionType;
+        } else {
+          // If we cannot find any matching mimetype it's probably a text file...
+          mimeType = 'text/plain';
+        }
+      } else {
+        mimeType = fileType.mime;
       }
 
-      // detect the filetype based on the first 4100 bytes
-      // @see https://github.com/sindresorhus/file-type
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const fileType = FileType(reader.result);
-        let mimeType;
-        if (fileType === null || fileType.mime === null) {
-          console.log('No magic numbers found for file ' + file.name);
-          const extensionType = lookup(file.name);
-          if (extensionType) {
-            mimeType = extensionType;
-          } else {
-            mimeType = 'text/plain';
-          }
-        } else {
-          mimeType = fileType.mime;
-        }
-
-        const fileModel = new FileModel(file, mimeType, 'output', 1);
-        this.model.files.push(fileModel);
-        console.log('New file added: ' + fileModel);
-      };
-      reader.readAsArrayBuffer(file.slice(0, 4100));
-    }
+      const fileModel = new FileModel(file, mimeType, 1);
+      if (ioType === 'input') {
+        this.model.inputFileSample = fileModel;
+      } else {
+        this.model.outputFileSample = fileModel;
+      }
+      console.log('New file ' + ioType + ' added: ' + JSON.stringify(fileModel));
+    };
+    reader.readAsArrayBuffer(file.slice(0, 4100));
   }
 
-  public fetchRepositories() {
-    this.opendoar.fetchRepositories(this.model.files);
+  public fetchRepositories: (MovingDirection) => Promise<boolean> | boolean = (direction) => {
+    // if we walk the wizard backwards we don't need to re-fetch the personal data
+    if (direction === MovingDirection.Backwards) {
+      return true;
+    } else {
+      // if it's not backwards we fetch the repo data
+      return new Promise<boolean>((resolve, reject) => {
+        this.opendoar.fetchRepositories(this.model.outputFileSample).then((value: RepoModel[]) => {
+          console.log('OpenDOAR Repo data successfully loaded!');
+          console.log(value);
+          // TODO set the repos in the model
+          resolve(true);
+        }).catch((text) => {
+          resolve(false);
+        });
+      });
+    }
   }
 
   public generateDmp() {
@@ -112,10 +129,10 @@ export class AppComponent {
 
             body: [
               [ 'MimeType', 'Amount', 'Size', 'Total Size' ],
-              [ this.model.files[0].mimeType,
-                this.model.files[0].amount,
-                this.model.files[0].file.size + ' Byte',
-                (this.model.files[0].file.size * this.model.files[0].amount) + ' Byte'],
+              [ this.model.outputFileSample.mimeType,
+                this.model.outputFileSample.amount,
+                this.model.outputFileSample.file.size + ' Byte',
+                (this.model.outputFileSample.file.size * this.model.outputFileSample.amount) + ' Byte'],
             ]
           }
         },

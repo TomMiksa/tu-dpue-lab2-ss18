@@ -8,7 +8,7 @@
           <div class="form-group">
             <div class="form-row">
               <label for="researcherName">Name of the researcher</label>
-              <input type="text" class="form-control" id="researcherName" required [(ngModel)]="model.researcherName" name="researcherName" #researcherName="ngModel" placeholder="Best results with <Lastname> <Firstname>">
+              <input type="text" class="form-control" id="researcherName" required [(ngModel)]="model.researcherName" name="researcherName" #researcherName="ngModel">
               <div *ngIf="!researcherName.valid && !researcherName.pristine && researcherName.errors.notFound" class="alert alert-danger">
                 Researcher could not be found in TISS.
               </div>
@@ -36,15 +36,43 @@
   <!-- TISS Administrative Data -->
   <wizard-step stepTitle="Administrative Data" navigationSymbol="&#xf2bb;" navigationSymbolFontFamily="FontAwesome" [canEnter]="fetchTissData">
     <div class="centered-content">
-      <div>
-        TODO: <br>
-        - Query basic administrative data and show it here
-      </div>
+      <form #adminDataForm="ngForm" class="form-horizontal">
+        <div class="form-group">
+          <div class="form-row">
+            <label for="selectedResearcher">Select the researcher in the list of search results:</label>
+            <select class="form-control" id="selectedResearcher" [(ngModel)]="model.selectedTissResearcher" required name="selectedResearcher" #selectedResearcher="ngModel">
+              <option *ngFor="let entry of model.tissSearchResult; let i = index" [ngValue]="entry">{{entry.preceding_titles}} {{entry.firstname}} {{entry.lastname}}<span *ngIf="entry.postpositioned_titles">, {{entry.postpositioned_titles}}</span></option>
+            </select>
+          </div>
+          <ng-container *ngIf="model?.selectedTissResearcher">
+            <dl class="dl-horizontal">
+              <dt *ngIf="model?.selectedTissResearcher?.preceding_titles">Preceding Titles</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.preceding_titles">{{model?.selectedTissResearcher?.preceding_titles}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.firstname">First Name</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.firstname">{{model?.selectedTissResearcher?.firstname}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.lastname">Last Name</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.lastname">{{model?.selectedTissResearcher?.lastname}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.postpositioned_titles">Post-positioned Titles</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.postpositioned_titles">{{model?.selectedTissResearcher?.postpositioned_titles}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.gender">Gender</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.gender">{{model?.selectedTissResearcher?.gender}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.main_email">Mail</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.main_email">{{model?.selectedTissResearcher?.main_email}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.main_phone_number">Phone</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.main_phone_number">{{model?.selectedTissResearcher?.main_phone_number}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.employee?.employment?.organisational_unit">Organizational Unit</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.employee?.employment?.organisational_unit">{{model?.selectedTissResearcher?.employee?.employment?.organisational_unit}}</dd>
+              <dt *ngIf="model?.selectedTissResearcher?.employee?.employment?.function">Function</dt>
+              <dd *ngIf="model?.selectedTissResearcher?.employee?.employment?.function">{{model?.selectedTissResearcher?.employee?.employment?.function}}</dd>
+            </dl>
+          </ng-container>
+        </div>
 
-      <div class="btn-group">
-        <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="submit" class="btn btn-secondary active" nextStep>Continue</button>
-      </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" previousStep>Back</button>
+          <button type="submit" class="btn btn-secondary active" [disabled]="!adminDataForm.form.valid"  nextStep>Continue</button>
+        </div>
+      </form>
     </div>
   </wizard-step>
 
@@ -53,9 +81,11 @@
   <!-- Analyse Data: Allow analyse sample data (upload, analyze metadata, define if it's input or output) -->
   <wizard-step stepTitle="Analyse Data" navigationSymbol="&#xf093;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
-      <div ngfDrop selectable="1" multiple="1"
-           (filesChange)="addSampleFiles($event)" class="well files-drop-zone" >
-        Drop your files here or click to open file chooser.
+      <div ngfDrop selectable="1" (fileChange)="addFileSample($event, 'input')" class="well files-drop-zone" >
+        Select one input data sample. Either drop the file here or click to open the file chooser.
+      </div>
+      <div ngfDrop selectable="1" (fileChange)="addFileSample($event, 'output')" class="well files-drop-zone" >
+        Select one output data sample. Either drop the file here or click to open the file chooser.
       </div>
       <div>
         <table class="table">
@@ -69,12 +99,19 @@
           </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let file of model.files; let i=index" class="form-group">
-              <td align="left"><strong>{{ file.file.name }}</strong></td>
-              <td>{{ file.mimeType }}</td>
-              <td>{{ file.file.size | filesize }}</td>
-              <td><select class="form-control" [(ngModel)]="file.ioType"><option value="input">Input</option><option value="output">Output</option></select></td>
-              <td><input class="form-control" type="number" name="amount" placeholder="1" [(ngModel)]="file.amount"></td>
+            <tr *ngIf="model.inputFileSample" class="form-group">
+              <td align="left"><strong>{{ model.inputFileSample.file.name }}</strong></td>
+              <td>{{ model.inputFileSample.mimeType }}</td>
+              <td>{{ model.inputFileSample.file.size | filesize }}</td>
+              <td>Input</td>
+              <td><input class="form-control" type="number" name="amount" placeholder="1" [(ngModel)]="model.inputFileSample.amount"></td>
+            </tr>
+            <tr *ngIf="model.outputFileSample" class="form-group">
+              <td align="left"><strong>{{ model.outputFileSample.file.name }}</strong></td>
+              <td>{{ model.outputFileSample.mimeType }}</td>
+              <td>{{ model.outputFileSample.file.size | filesize }}</td>
+              <td>Output</td>
+              <td><input class="form-control" type="number" name="amount" placeholder="1" [(ngModel)]="model.outputFileSample.amount"></td>
             </tr>
           </tbody>
         </table>
@@ -82,7 +119,7 @@
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="submit" class="btn btn-secondary active" [disabled]="!(model.files.length > 0)" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" [disabled]="!model.inputFileSample || !model.outputFileSample" nextStep>Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -90,7 +127,7 @@
 
 
   <!-- Repository: Select a repository based on the location and the previously entered output data -->
-  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories()">
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome"  [canEnter]="fetchRepositories">
     <div class="centered-content">
       <div>
         TODO: <br>

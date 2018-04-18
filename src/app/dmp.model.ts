@@ -6,6 +6,8 @@ export class DmpModel {
     public projectName?: String,
     public researcherName?: String,
     public tissSearchResult?: ResearcherModel[],
-    public files: FileModel[] = []
+    public selectedTissResearcher?: ResearcherModel,
+    public inputFileSample?: FileModel,
+    public outputFileSample?: FileModel
   ) { }
 }

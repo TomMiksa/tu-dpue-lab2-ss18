@@ -3,6 +3,7 @@
   lastname: string;
   gender: string;
   preceding_titles: string;
+  postpositioned_titles: string;
   main_phone_number: string;
   main_email: string;
   employee: Employee;
