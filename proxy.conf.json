@@ -8,10 +8,10 @@
     "changeOrigin": true
   },
   "/opendoar": {
-    "target": "http://www.opendoar.org",
-    "secure": false,
+    "target": "https://v2.opendoar.sherpa.ac.uk",
+    "secure": true,
     "pathRewrite": {
-      "^/opendoar": "/api13.php"
+      "^/opendoar": "/cgi/retrieve"
     },
     "changeOrigin": true
   }

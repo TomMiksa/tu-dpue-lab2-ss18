@@ -1,40 +1,48 @@
 import { Injectable } from '@angular/core';
 import {FileModel} from './file.model';
 import {RepoModel} from './repo.model';
-import {countries, Country} from 'countries-list';
+import {HttpClient} from '@angular/common/http';
 const GeoCode = require('geo-coder').GeoCode;
 
 @Injectable()
 export class OpenDoarService {
 
-  repoTypeMapping: Map<String, Array<number>> = new Map<String, Array<number>>();
-  repoDefaultType = 9; // Datasets
-  repoDefaultCountries = ['at', 'eu']; // Austria, Europe
+  repoTypeMapping: Map<String, Array<string>> = new Map<String, Array<string>>();
+  repoDefaultType = 'datasets'; // Datasets
+  repoDefaultCountry = 'at'; // Austria
 
-  constructor() {
+  constructor(private http: HttpClient) {
     // create the type mapping for fetching repositories
+    // PDFs:
+    this.repoTypeMapping.set('application/pdf',
+      [
+        'journal_articles',
+        'unpub_reports_and_working_papers',
+        'conference_and_workshop_papers',
+        'theses_and_dissertations'
+      ]);
 
-    // Default for PDFs is that it's a finished paper
-    // 1 Research papers (pre- and postprints)
-    // 3 Research papers (postprints only)
-    this.repoTypeMapping.set('application/pdf', [1, 3]);
-    // 8 Books chapters and sections
+    // E-Books:
+    this.repoTypeMapping.set('', ['books_chapters_and_sections']);
     // TODO add ebook mimetypes
 
-    // Default for json is that it's a dataset
-    // 9 Datasets
-    this.repoTypeMapping.set('application/json', [9]);
-    // 11 Multimedia and audio-visual materials
-    // TODO add audio mimetypes
+    // Datasets:
+    this.repoTypeMapping.set('application/json', ['datasets']);
+    // TODO add other dataset mimetypes
 
-    // 12 Software
+    // Multimedia:
+    this.repoTypeMapping.set('', ['multimedia_and_audio_visual']);
+    // TODO add other multimedia mimetypes
+
+    // Software:
+    this.repoTypeMapping.set('', ['software']);
     // TODO add software mimetypes
   }
 
   public fetchRepositories(file: FileModel): Promise<RepoModel[]> {
     return new Promise<RepoModel[]>((resolve, reject) => {
       // find the different repositories for the output types
-      const repositoryTypes: Set<number> = new Set<number>();
+      const repositoryTypes: Set<string> = new Set<string>();
 
       // find the repository numbers for the mimeType and add them to the respositoryTypes set
       const repoTypes = this.repoTypeMapping.get(file.mimeType);
@@ -47,47 +55,50 @@ export class OpenDoarService {
       } else {
         repoTypes.forEach((repoType) => repositoryTypes.add(repoType));
       }
-      const rt = Array.from(repositoryTypes).join(',');
-      console.log('Looking for repositories accepting the following types: ' + rt);
 
       // fetch the countryCode
+      // FIXME a limit higher than 30 causes an internal server error,
+      // but this could mean that there are less than 3 options for the user
       this.getCountryCode().then((country) => {
-        console.log('About to call http://opendoar.org/api.php?co=' + country + '&rt=' + rt);
-        // TODO get repos with the API call
-        // TODO return them as in a promise
-        // TODO call resolve with the repos
-        const repos: RepoModel[] = [{url: 'test'}];
-        resolve(repos);
+        this.http.get('/opendoar?api-key=45E885A2-4336-11E8-951F-3A1257C617BB&limit=30'
+          + '&item-type=repository&format=Json&filter=[[\"country\",\"equals\",\"' + country + '\"]]').subscribe(
+          (repoData: any) => {
+            if (!!repoData && !!repoData.items && repoData.items.length > 0) {
+              // filter for repos with the needed content type and only take the first three
+              console.log(repoData.items);
+              resolve((<RepoModel[]>repoData.items)
+                .filter((repo) =>
+                  repo.repository_metadata.content_types.some((entry) => repoTypes.includes(entry)))
+                .slice(0, 2));
+            } else {
+              reject('No repositories found for your location.');
+            }
+          },
+          reject,
+          () => console.log('Done performing OpenDOAR repo search.')
+        );
       }).catch(reject);
     });
   }
 
-  private getCountryCode(): Promise<string[]> {
-    return new Promise<string[]>((resolve, reject) => {
+  private getCountryCode(): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((location) => {
           const geoCode = new GeoCode();
           geoCode.reverse(location.coords.latitude, location.coords.longitude).then(result => {
-              const results = [];
-              const countryCode = result.raw.address.country_code;
-              results.push(countryCode);
-              // TODO continent does not seem to work?!
-              const country = countries[countryCode.toUpperCase()];
-              if (country && country.continent) {
-                results.push(country.continent.toLowerCase());
-              }
-              resolve(results);
+              resolve(result.raw.address.country_code.toLowerCase());
             }).catch((err) => {
-              alert('Location could not be determined (probably has been blocked). Using default countries (Austria, Europe)');
-              resolve(this.repoDefaultCountries);
+              alert('Location could not be determined (probably has been blocked). Using default country (Austria).');
+              resolve(this.repoDefaultCountry);
           });
         }, (error) => {
-          alert('Location could not be determined (probably has been blocked). Using default countries (Austria, Europe)');
-          resolve(this.repoDefaultCountries);
+          alert('Location could not be determined (probably has been blocked). Using default countries (Austria).');
+          resolve(this.repoDefaultCountry);
         });
       } else {
-        alert('Geolocation is not supported by this browser. Using default countries (Austria, Europe).');
-        resolve(this.repoDefaultCountries);
+        alert('Geolocation is not supported by this browser. Using default countries (Austria).');
+        resolve(this.repoDefaultCountry);
       }
     });
   }

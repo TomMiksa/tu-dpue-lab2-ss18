@@ -127,19 +127,23 @@
 
 
   <!-- Repository: Select a repository based on the location and the previously entered output data -->
-  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome"  [canEnter]="fetchRepositories">
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" [canEnter]="fetchRepositories">
     <div class="centered-content">
-      <div>
-        TODO: <br>
-        - Recommend open access repository for the OUTPUTS.<br>
-        - Use OpenDOAR API (takes mime-type of output + location of the user).<br>
-        - User should choose from up to 3 suggested repos based on location (f.e. Austria: Prefer Austrian / European repos).
-      </div>
+      <form #repoForm="ngForm" class="form-horizontal">
+        <div class="form-group">
+          <div class="form-row">
+            <label for="selectedRepo">Select repository you're going to use:</label>
+            <select class="form-control" id="selectedRepo" [(ngModel)]="model.selectedRepo" required name="selectedRepo" #selectedRepo="ngModel">
+              <option *ngFor="let entry of model.repoSearchResult; let i = index" [ngValue]="entry">{{entry.repository_metadata.name[0].name}}</option>
+            </select>
+          </div>
+        </div>
 
-      <div class="btn-group">
-        <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="submit" class="btn btn-secondary active" nextStep>Continue</button>
-      </div>
+        <div class="btn-group">
+          <button type="button" class="btn btn-secondary" previousStep>Back</button>
+          <button type="submit" class="btn btn-secondary active" [disabled]="!repoForm.form.valid"  nextStep>Continue</button>
+        </div>
+      </form>
     </div>
   </wizard-step>
 

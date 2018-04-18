@@ -10,7 +10,7 @@ import {OpenDoarService} from './opendoar.service';
 import {MovingDirection} from 'ng2-archwizard';
 import {ResearcherModel} from './researcher.model';
 import {NgModel} from '@angular/forms';
-import {RepoModel} from "./repo.model";
+import {RepoModel} from './repo.model';
 
 @Component({
   selector: 'app-root',
@@ -92,7 +92,7 @@ export class AppComponent {
         this.opendoar.fetchRepositories(this.model.outputFileSample).then((value: RepoModel[]) => {
           console.log('OpenDOAR Repo data successfully loaded!');
           console.log(value);
-          // TODO set the repos in the model
+          this.model.repoSearchResult = value;
           resolve(true);
         }).catch((text) => {
           resolve(false);
