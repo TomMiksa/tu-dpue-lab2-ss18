@@ -25,3 +25,9 @@ RUN rm -rf /usr/share/nginx/html/*
 
 # Copy built app to wwwroot
 COPY --from=node /app/dist/ /usr/share/nginx/html
+
+# Remove the default configuration
+RUN rm /etc/nginx/conf.d/default.conf
+
+# Add our nginx config folder to the container
+COPY config /etc/nginx/conf.d/

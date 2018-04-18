@@ -90,7 +90,7 @@
 
 
   <!-- Repository: Select a repository based on the location and the previously entered output data -->
-  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories($event)">
+  <wizard-step stepTitle="Repository" navigationSymbol="&#xf24e;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="fetchRepositories()">
     <div class="centered-content">
       <div>
         TODO: <br>
@@ -126,7 +126,7 @@
 
 
   <!-- Generate DMP: Download the generated PDF- and JSON-LD-DMP -->
-  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp($event)">
+  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp()">
     <div class="centered-content">
       <div>
         TODO: <br>

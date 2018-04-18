@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {FileModel} from './file.model';
 
-// TODO configure NGiNX upstream
 @Injectable()
 export class OpenDoarService {
 

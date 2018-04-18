@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ResearcherModel} from './researcher.model';
-import {parse} from 'fast-xml-parser';
 
-// TODO configure NGiNX upstream
+// really dirty hack because fast-xml-parser/src/parser.d.ts contains typescript compile error
+const parse = require('fast-xml-parser/src/parser.js');
+
 @Injectable()
 export class TissService {
 
@@ -21,7 +22,7 @@ export class TissService {
               const tissID = singleResult.id;
               this.http.get(`/tiss/person/v21/id/${tissID}`, { responseType: 'text' }).subscribe(
                 (personData: string) => {
-                  const parsed = parse(personData, {ignoreNameSpace: true});
+                  const parsed = parse.parse(personData, {ignoreNameSpace: true});
                   console.log(JSON.stringify(parsed));
                   if (!!parsed && !!parsed.tuvienna && !!parsed.tuvienna.person) {
                     const model: ResearcherModel = parsed.tuvienna.person;
