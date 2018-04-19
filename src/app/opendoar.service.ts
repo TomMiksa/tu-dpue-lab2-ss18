@@ -23,20 +23,44 @@ export class OpenDoarService {
       ]);
 
     // E-Books:
-    this.repoTypeMapping.set('', ['books_chapters_and_sections']);
-    // TODO add ebook mimetypes
+    this.repoTypeMapping.set('application/vnd.amazon.ebook', ['books_chapters_and_sections']);
+    this.repoTypeMapping.set('application/epub+zip', ['books_chapters_and_sections']);
 
     // Datasets:
     this.repoTypeMapping.set('application/json', ['datasets']);
-    // TODO add other dataset mimetypes
+    this.repoTypeMapping.set('text/csv', ['datasets']);
+    this.repoTypeMapping.set('application/x-7z-compressed', ['datasets']);
+    this.repoTypeMapping.set('application/zip', ['datasets']);
+    this.repoTypeMapping.set('application/x-bzip', ['datasets']);
+    this.repoTypeMapping.set('application/x-bzip2', ['datasets']);
+    this.repoTypeMapping.set('application/x-tar', ['datasets']);
+    this.repoTypeMapping.set('application/x-rar-compressed', ['datasets']);
 
     // Multimedia:
-    this.repoTypeMapping.set('', ['multimedia_and_audio_visual']);
-    // TODO add other multimedia mimetypes
+    this.repoTypeMapping.set('image/gif', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('image/x-icon', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('image/jpeg', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('image/png', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('image/svg+xml', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('image/tiff', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('image/webp', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('video/x-msvideo', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('video/mpeg', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('video/ogg', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('video/webm', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('video/3gpp', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('video/3gpp2', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('application/ogg', ['multimedia_and_audio_visual']);
+    this.repoTypeMapping.set('audio/ogg', ['multimedia_and_audio_visual']);
 
     // Software:
-    this.repoTypeMapping.set('', ['software']);
-    // TODO add software mimetypes
+    this.repoTypeMapping.set('application/octet-stream', ['software']);
+    this.repoTypeMapping.set('application/javascript', ['software']);
+    this.repoTypeMapping.set('application/ecmascript', ['software']);
+    this.repoTypeMapping.set('application/java-archive', ['software']);
+    this.repoTypeMapping.set('application/typescript', ['software']);
+    this.repoTypeMapping.set('application/x-sh', ['software']);
+    this.repoTypeMapping.set('application/x-csh', ['software']);
   }
 
   public fetchRepositories(file: FileModel): Promise<RepoModel[]> {
