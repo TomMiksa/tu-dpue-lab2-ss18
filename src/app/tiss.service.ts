@@ -26,6 +26,7 @@ export class TissService {
                   console.log(JSON.stringify(parsed));
                   if (!!parsed && !!parsed.tuvienna && !!parsed.tuvienna.person) {
                     const model: ResearcherModel = parsed.tuvienna.person;
+                    model.id = tissID.toString();
                     result.push(model);
                   } else {
                     reject('No person details found for ID ' + tissID);

@@ -32,6 +32,7 @@
     "font-awesome": "^4.7.0",
     "geo-coder": "^1.0.2",
     "jquery": "2.1.4",
+    "jsonld": "^1.0.1",
     "lodash": "3.10.1",
     "mime-types": "^2.1.18",
     "ng2-archwizard": "^2.1.0",

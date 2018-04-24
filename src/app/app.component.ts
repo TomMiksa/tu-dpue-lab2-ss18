@@ -12,6 +12,9 @@ import {ResearcherModel} from './researcher.model';
 import {NgModel} from '@angular/forms';
 import {RepoModel} from './repo.model';
 import {LicenseModel} from './license.model';
+import {PDFService} from "./pdf.service";
+import {JsonService} from "./json.service";
+import * as jsonld from 'jsonld/dist/jsonld.js';
 
 // declare $ to import jQuery globally
 declare var $: any;
@@ -28,7 +31,7 @@ export class AppComponent {
 
   @ViewChild('researcherName') researcherNameField: NgModel;
 
-  constructor(private tiss: TissService, private opendoar: OpenDoarService) {
+  constructor(private tiss: TissService, private opendoar: OpenDoarService, private pdfservice: PDFService, private jsonservice: JsonService) {
     // called first time before the ngOnInit()
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
   }
@@ -112,51 +115,47 @@ export class AppComponent {
     const definitionDMP = {
       footer: function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; },
       content: [
-        {text: this.model.projectName, style: 'header'},
-        {
-          text: [
-            {text: 'Administrative Data:', style: 'subheader'}
-          ]
-        },
-        'This is a sample text',
-        // TODO: Fill in administrative data
+        {text: this.model.projectName + '\n\n', style: 'header'},
+
+        {text: 'Administrative Data:' + '\n\n', style: 'subheader'},
+
+        {text: 'Author of this document' + '\n\n', style: 'subsubheader'},
+
+        this.pdfservice.buildResearcher(this.model.selectedTissResearcher),
+
+        '\n',
+
         {
           text: [
             {text: 'Data used:', style: 'subheader'},
           ],
         },
-        'This is an overview of the data used in the project:',
-        {
-          table: {
-            headerRows: 1,
-            widths: [ '*', 'auto', 100, '*' ],
-            // TODO: Fill in more than one row
+        '\n',
 
-            body: [
-              [ 'MimeType', 'Amount', 'Size', 'Total Size' ],
-              [ this.model.outputFileSample.mimeType,
-                this.model.outputFileSample.amount,
-                this.model.outputFileSample.file.size + ' Byte',
-                (this.model.outputFileSample.file.size * this.model.outputFileSample.amount) + ' Byte'],
-            ]
-          }
-        },
+        'This is an overview of the data used in the project:',
+
+        '\n',
+
+        this.pdfservice.table(this.model.inputFileSample, this.model.outputFileSample),
+
+        '\n',
         {
           text: [
-            {text: 'Repositories:', style: 'subheader'},
+            {text: 'Repository:', style: 'subheader'},
           ]
         },
-        'This is a sample text',
-        // TODO: Fill in repositories
+        '\n',
+        this.pdfservice.repositoryBuilder(this.model.selectedRepo),
+        '\n',
 
         {
           text: [
             {text: 'License:', style: 'subheader'},
           ]
         },
-        'This is a sample text'
-        // TODO: Fill in license
-
+        '\n',
+        this.pdfservice.buildLicense(this.model.selectedLicense),
+        '\n',
       ],
 
       styles: {
@@ -166,6 +165,10 @@ export class AppComponent {
         },
         subheader: {
           fontSize: 18,
+          bold: true
+        },
+        subsubheader: {
+          fontSize: 14,
           bold: true
         },
         quote: {
@@ -181,10 +184,10 @@ export class AppComponent {
   }
 
   public downloadMADmp() {
-    // TODO generate the Machine Actionable DMP here
-    const definitionMADMP = {content:
-      'This is an sample PDF printed with pdfMake' };
-    pdfMake.createPdf(definitionMADMP).download(this.model.projectName + 'MachineActionableDMP');
+    var json = this.jsonservice.getJSON(this.model);
+
+    console.log(json);
+    this.exportJson(json);
 
   }
 
@@ -202,5 +205,27 @@ export class AppComponent {
   public setLicense = (license: LicenseModel) => {
     console.log(JSON.stringify(license));
     this.model.selectedLicense = license;
+  }
+
+  exportJson(json): void {
+    const file = new Blob([json], {type: 'text/json'});
+    this.download(file,this.model.projectName + "MADMP.json");
+  }
+
+  download(blob, filename) {
+    if (window.navigator.msSaveOrOpenBlob) // IE10+
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+    else { // Others
+      var a = document.createElement("a"),
+        url = URL.createObjectURL(blob);
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function() {
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }, 0);
+    }
   }
 }

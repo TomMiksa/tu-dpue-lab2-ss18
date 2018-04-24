@@ -10,6 +10,8 @@ import {FileSizeModule} from 'ngx-filesize';
 import {HttpClientModule} from '@angular/common/http';
 import {TissService} from './tiss.service';
 import {OpenDoarService} from './opendoar.service';
+import {JsonService} from "./json.service";
+import {PDFService} from "./pdf.service";
 
 
 @NgModule({
@@ -25,7 +27,10 @@ import {OpenDoarService} from './opendoar.service';
     ArchwizardModule.forRoot() ],
   providers: [
     TissService,
-    OpenDoarService
+    OpenDoarService,
+    PDFService,
+    JsonService
+
   ],
   bootstrap: [AppComponent]
 })

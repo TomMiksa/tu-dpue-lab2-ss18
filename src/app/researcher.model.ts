@@ -7,6 +7,7 @@
   main_phone_number: string;
   main_email: string;
   employee: Employee;
+  id: string;
 }
 export interface Employee {
   employment: Employment;
