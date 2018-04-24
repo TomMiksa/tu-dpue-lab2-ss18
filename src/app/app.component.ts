@@ -11,6 +11,10 @@ import {MovingDirection} from 'ng2-archwizard';
 import {ResearcherModel} from './researcher.model';
 import {NgModel} from '@angular/forms';
 import {RepoModel} from './repo.model';
+import {LicenseModel} from './license.model';
+
+// declare $ to import jQuery globally
+declare var $: any;
 
 @Component({
   selector: 'app-root',
@@ -20,6 +24,7 @@ import {RepoModel} from './repo.model';
 })
 export class AppComponent {
   model: DmpModel = new DmpModel();
+  licenseSelectorAdded = false; // boolean param to make sure that the license selector is only added once
 
   @ViewChild('researcherName') researcherNameField: NgModel;
 
@@ -101,8 +106,8 @@ export class AppComponent {
     }
   }
 
-  public generateDmp() {
-    // TODO generate the two DMPs here
+  public downloadHRDmp() {
+    // TODO generate the Human-Readable DMP here
     console.log('We should generate the DMPs here so that they can be displayed / downloaded...');
     const definitionDMP = {
       footer: function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; },
@@ -172,10 +177,30 @@ export class AppComponent {
       }
 
     };
+    pdfMake.createPdf(definitionDMP).download(this.model.projectName + 'DMP');
+  }
+
+  public downloadMADmp() {
+    // TODO generate the Machine Actionable DMP here
     const definitionMADMP = {content:
       'This is an sample PDF printed with pdfMake' };
-    pdfMake.createPdf(definitionDMP).download(this.model.projectName + 'DMP');
     pdfMake.createPdf(definitionMADMP).download(this.model.projectName + 'MachineActionableDMP');
 
+  }
+
+  public selectLicense() {
+    if (!this.licenseSelectorAdded) {
+      this.licenseSelectorAdded = true;
+      $('<button type="button" class="btn btn-secondary">Click here to select a license</button>')
+        .appendTo('#licenseSelector')
+        .licenseSelector({
+          showLabels: true,
+          onLicenseSelected : this.setLicense});
+    }
+  }
+
+  public setLicense = (license: LicenseModel) => {
+    console.log(JSON.stringify(license));
+    this.model.selectedLicense = license;
   }
 }

@@ -150,16 +150,24 @@
 
 
   <!-- License: Select a license using the EUDAT license selector -->
-  <wizard-step stepTitle="License" navigationSymbol="&#xf085;" navigationSymbolFontFamily="FontAwesome">
+  <wizard-step stepTitle="License" navigationSymbol="&#xf085;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="selectLicense()">
     <div class="centered-content">
-      <div>
-        TODO: <br>
-        - Use EUDAT license selector (https://github.com/ufal/public-license-selector) to decide on a license
-      </div>
+      <br><div id="licenseSelector"></div><br>
+
+      <ng-container *ngIf="model?.selectedLicense">
+        <dl class="dl-horizontal">
+          <dt *ngIf="model?.selectedLicense?.name">Name</dt>
+          <dd *ngIf="model?.selectedLicense?.name">{{model?.selectedLicense?.name}}</dd>
+          <dt *ngIf="model?.selectedLicense?.url">URL</dt>
+          <dd *ngIf="model?.selectedLicense?.url"><a target="_blank" href="{{model?.selectedLicense?.url}}">{{model?.selectedLicense?.url}}</a></dd>
+          <dt *ngIf="model?.selectedLicense?.description">Description</dt>
+          <dd *ngIf="model?.selectedLicense?.description">{{model?.selectedLicense?.description}}</dd>
+        </dl>
+      </ng-container>
 
       <div class="btn-group">
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="submit" class="btn btn-secondary active" nextStep>Continue</button>
+        <button type="submit" class="btn btn-secondary active" nextStep [disabled]="!model.selectedLicense">Continue</button>
       </div>
     </div>
   </wizard-step>
@@ -167,18 +175,19 @@
 
 
   <!-- Generate DMP: Download the generated PDF- and JSON-LD-DMP -->
-  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome" (stepEnter)="generateDmp()">
+  <wizard-step stepTitle="Generate DMP" navigationSymbol="&#xf1c1;" navigationSymbolFontFamily="FontAwesome">
     <div class="centered-content">
-      <div>
-        TODO: <br>
-        - Generate a PDF (human readable) and a JSON-LD (machine-actionable) DMP and provide it as download.
+
+      <br>
+      <div class="btn-group">
+        <button type="submit" class="btn btn-secondary" (click)="downloadHRDmp()">Download Humand-Reable DMP</button>
+        <button type="button" class="btn btn-secondary" (click)="downloadMADmp()">Download Machine-Actionable DMP</button>
       </div>
+      <br><br>
 
       <div class="btn-group">
         <button type="submit" class="btn btn-secondary" resetWizard>Restart</button>
         <button type="button" class="btn btn-secondary" previousStep>Back</button>
-        <button type="submit" class="btn btn-secondary" generatePDF>GeneratePDF</button>
-
       </div>
     </div>
   </wizard-step>

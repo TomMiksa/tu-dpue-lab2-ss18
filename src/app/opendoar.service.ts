@@ -72,7 +72,7 @@ export class OpenDoarService {
       const repoTypes = this.repoTypeMapping.get(file.mimeType);
 
       // if the repository type could not be determined, assume the default repo type
-      if (!repoTypes) {
+      if (repoTypes === undefined || repoTypes.length === 0) {
         console.log('Repository type for output file ' + JSON.stringify(file)
           + 'could not be found. Using default repo type ' + this.repoDefaultType);
         repositoryTypes.add(this.repoDefaultType);
@@ -92,7 +92,7 @@ export class OpenDoarService {
               console.log(repoData.items);
               resolve((<RepoModel[]>repoData.items)
                 .filter((repo) =>
-                  repo.repository_metadata.content_types.some((entry) => repoTypes.includes(entry)))
+                  repo.repository_metadata.content_types.some((entry) => repositoryTypes.has(entry)))
                 .slice(0, 2));
             } else {
               reject('No repositories found for your location.');

@@ -1,6 +1,7 @@
 import {FileModel} from './file.model';
 import {ResearcherModel} from './researcher.model';
 import {RepoModel} from './repo.model';
+import {LicenseModel} from "./license.model";
 
 export class DmpModel {
   constructor(
@@ -12,5 +13,6 @@ export class DmpModel {
     public outputFileSample?: FileModel,
     public repoSearchResult?: RepoModel[],
     public selectedRepo?: RepoModel,
+    public selectedLicense?: LicenseModel
   ) { }
 }
