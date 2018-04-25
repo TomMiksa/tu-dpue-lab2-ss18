@@ -45,10 +45,11 @@ The missing server-side repository-type filtering in combination with the enforc
 ##### JSON-LD
 
 For the creation of the machine-readable DMP five vocabularies have been used:
-The Dublin Core elements (http://purl.org/dc/elements/1.1/)
-The Dublin Core Metadata terms (http://purl.org/dc/terms/).
-Friend of a Friend (FOAF) (http://xmlns.com/foaf/0.1/)
-The Preservation Metadata: Implementation Strategies (PREMIS) (http://www.loc.gov/premis/rdf/v1#")
+
+The Dublin Core elements (http://purl.org/dc/elements/1.1/)  
+The Dublin Core Metadata terms (http://purl.org/dc/terms/).  
+Friend of a Friend (FOAF) (http://xmlns.com/foaf/0.1/)  
+The Preservation Metadata: Implementation Strategies (PREMIS) (http://www.loc.gov/premis/rdf/v1#")  
 
 Suitable fields have been introduced by us to ensure better clarity and structure of the document.
 FOAF, DC, DCTERMS and PREMIS have been chosen because they are widespread and accepted vocabularies for their respective fields.
