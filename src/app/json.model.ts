@@ -21,14 +21,14 @@ export interface Repository {
 export interface Inputfile {
   "dc:title"?: String;
   "premis:hasFormat"?: String;
-  "dmp:hasDataVolume"?: String;
+  "dcterms:extent"?: String;
   "amount"?: String;
 }
 
 export interface Outputfile {
   "dc:title"?: String;
   "premis:hasFormat"?: String;
-  "dmp:hasDataVolume"?: String;
+  "dcterms:extent"?: String;
   "amount"?: String;
 }
 
@@ -51,7 +51,6 @@ export interface RootObject {
 }
 
 export interface Context {
-  dmp: string;
   foaf: string;
   dc: string;
   dcterms: string;

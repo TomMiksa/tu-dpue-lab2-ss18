@@ -14,7 +14,6 @@ export class JsonService {
     var context = <Context>{};
     context.dc = 'http://purl.org/dc/elements/1.1/';
     context.dcterms = 'http://purl.org/dc/terms/';
-    context.dmp = 'http://purl.org/madmps#';
     context.foaf = 'http://xmlns.com/foaf/0.1/';
     context.premis = 'http://www.loc.gov/premis/rdf/v1#';
     object["@context"] = context;
@@ -51,14 +50,14 @@ export class JsonService {
     inputfile.amount = model.inputFileSample.amount.toString();
     inputfile["dc:title"] = model.inputFileSample.file.name;
     inputfile["premis:hasFormat"] = model.inputFileSample.mimeType;
-    inputfile["dmp:hasDataVolume"] = model.inputFileSample.file.size.toString();
+    inputfile["dcterms:extent"] = model.inputFileSample.file.size.toString() + 'Bytes';
     inputfile["amount"] = model.inputFileSample.amount.toString();
     object.Inputfile = [inputfile];
     var outputfile = <Outputfile>{};
     outputfile.amount = model.inputFileSample.amount.toString();
     outputfile["dc:title"] = model.outputFileSample.file.name;
     outputfile["premis:hasFormat"] = model.outputFileSample.mimeType;
-    outputfile["dmp:hasDataVolume"] = model.outputFileSample.file.size.toString();
+    outputfile["dcterms:extent"] = model.outputFileSample.file.size.toString() + 'Bytes';
     outputfile["amount"] = model.outputFileSample.amount.toString();
     object.Outputfile = [outputfile];
     var license = <License>{};
