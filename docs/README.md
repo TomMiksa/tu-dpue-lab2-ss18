@@ -28,10 +28,11 @@ container suitable for running on multiple OS. The program is written in Typescr
   ![Step 5](5.png)
   Afterwards the license selector opens and the user doubleclicks on one of the displayed licenses or clicks through the selection process. In this process the tool
   asks the user various questions regarding the data or software the license is picked for and determines a suitable license based on the answers of the user. 
+  ![Step 6](6.png)
  6. The last step does not take any additional input from the user, but offers both the machine-readable and the human-readable dmp as downloads.
- ![Step 6](6.png)
+ ![Step 7](7.png)
   When the user clicks on one of the download buttons, the download gets started.
-  ![Step 7](7.png)
+  ![Step 8](8.png)
 
 ##### OpenDOAR
 The API referenced in the description is deprecated and will be discontinued in May 2018. Therefore the [new API](http://v2.opendoar.sherpa.ac.uk/api.html) (which is currently in beta) was used.
