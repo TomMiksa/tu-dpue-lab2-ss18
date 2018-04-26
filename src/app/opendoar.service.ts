@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {FileModel} from './file.model';
 import {RepoModel} from './repo.model';
 import {HttpClient} from '@angular/common/http';
+
 const GeoCode = require('geo-coder').GeoCode;
 
 @Injectable()

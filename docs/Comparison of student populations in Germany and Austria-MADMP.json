@@ -1,0 +1,53 @@
+{
+  "@context": {
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "premis": "http://www.loc.gov/premis/rdf/v1#"
+  },
+  "dcterms:title": "Comparison of student populations in Germany and Austria",
+  "@type": "dmp:DataManagementPlan",
+  "dc:creator": [
+    {
+      "@id": "273984",
+      "foaf:familyName": "Rashed",
+      "foaf:firstName": "Alexander",
+      "foaf:title:": "BSc",
+      "foaf:Organization": "Spatial Planning",
+      "foaf:gender": "M",
+      "foaf:mbox": "alexander.rashed@tuwien.ac.at"
+    }
+  ],
+  "Inputfile": [
+    {
+      "amount": "1",
+      "dc:title": "Table-2.5.23.csv",
+      "premis:hasFormat": "text/csv",
+      "dcterms:extent": "7203Bytes"
+    }
+  ],
+  "Outputfile": [
+    {
+      "amount": "1",
+      "dc:title": "students.png",
+      "premis:hasFormat": "image/png",
+      "dcterms:extent": "19058Bytes"
+    }
+  ],
+  "license": [
+    {
+      "dcterms:title": "The MIT License (MIT)",
+      "dcterms:license": "http://opensource.org/licenses/mit-license.php",
+      "dcterms:description": "A short, permissive software license. Basically, you can do whatever you want as long as you include the original copyright and license."
+    }
+  ],
+  "repository": [
+    {
+      "URL": "https://phaidra.univie.ac.at/",
+      "dcterms:title": "Permanent Hosting, Archiving and Indexing of Digital Resources and Assets",
+      "dcterms:description": "This site provides access to the digitised copies of the institutions collection as well as teaching material. The interface is in German, English, Italian and Serbian.",
+      "dc:language": "de,it,en,sr",
+      "dc:type": "institutional"
+    }
+  ]
+}

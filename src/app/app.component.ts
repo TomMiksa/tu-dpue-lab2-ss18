@@ -12,9 +12,8 @@ import {ResearcherModel} from './researcher.model';
 import {NgModel} from '@angular/forms';
 import {RepoModel} from './repo.model';
 import {LicenseModel} from './license.model';
-import {PDFService} from "./pdf.service";
-import {JsonService} from "./json.service";
-import * as jsonld from 'jsonld/dist/jsonld.js';
+import {PDFService} from './pdf.service';
+import {JsonService} from './json.service';
 
 // declare $ to import jQuery globally
 declare var $: any;
@@ -31,7 +30,8 @@ export class AppComponent {
 
   @ViewChild('researcherName') researcherNameField: NgModel;
 
-  constructor(private tiss: TissService, private opendoar: OpenDoarService, private pdfservice: PDFService, private jsonservice: JsonService) {
+  constructor(private tiss: TissService, private opendoar: OpenDoarService, private pdfservice: PDFService,
+              private jsonservice: JsonService) {
     // called first time before the ngOnInit()
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
   }
@@ -110,7 +110,6 @@ export class AppComponent {
   }
 
   public downloadHRDmp() {
-    // TODO generate the Human-Readable DMP here
     console.log('We should generate the DMPs here so that they can be displayed / downloaded...');
     const definitionDMP = {
       footer: function(currentPage, pageCount) { return currentPage.toString() + ' of ' + pageCount; },
@@ -180,11 +179,11 @@ export class AppComponent {
       }
 
     };
-    pdfMake.createPdf(definitionDMP).download(this.model.projectName + 'DMP');
+    pdfMake.createPdf(definitionDMP).download(this.model.projectName + '-DMP.pdf');
   }
 
   public downloadMADmp() {
-    var json = this.jsonservice.getJSON(this.model);
+    const json = this.jsonservice.getJSON(this.model);
 
     console.log(json);
     this.exportJson(json);
@@ -209,14 +208,14 @@ export class AppComponent {
 
   exportJson(json): void {
     const file = new Blob([json], {type: 'text/json'});
-    this.download(file,this.model.projectName + "MADMP.json");
+    this.download(file, this.model.projectName + '-MADMP.json');
   }
 
   download(blob, filename) {
-    if (window.navigator.msSaveOrOpenBlob) // IE10+
+    if (window.navigator.msSaveOrOpenBlob) { // IE10+
       window.navigator.msSaveOrOpenBlob(blob, filename);
-    else { // Others
-      var a = document.createElement("a"),
+    } else { // Others
+      const a = document.createElement('a'),
         url = URL.createObjectURL(blob);
       a.href = url;
       a.download = filename;

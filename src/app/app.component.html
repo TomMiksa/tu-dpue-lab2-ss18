@@ -137,7 +137,18 @@
               <option *ngFor="let entry of model.repoSearchResult; let i = index" [ngValue]="entry">{{entry.repository_metadata.name[0].name}}</option>
             </select>
           </div>
-        </div>
+        </div><br>
+
+        <ng-container *ngIf="model?.selectedRepo">
+          <dl class="dl-horizontal">
+            <dt *ngIf="model?.selectedRepo?.repository_metadata?.name[0]?.name">Name</dt>
+            <dd *ngIf="model?.selectedRepo?.repository_metadata?.name[0]?.name">{{model?.selectedRepo?.repository_metadata?.name[0]?.name}}</dd>
+            <dt *ngIf="model?.selectedRepo?.repository_metadata?.url">URL</dt>
+            <dd *ngIf="model?.selectedRepo?.repository_metadata?.url"><a target="_blank" href="{{model?.selectedRepo?.repository_metadata?.url}}">{{model?.selectedRepo?.repository_metadata?.url}}</a></dd>
+            <dt *ngIf="model?.selectedRepo?.repository_metadata?.description">Description</dt>
+            <dd *ngIf="model?.selectedRepo?.repository_metadata?.description">{{model?.selectedRepo?.repository_metadata?.description}}</dd>
+          </dl>
+        </ng-container>
 
         <div class="btn-group">
           <button type="button" class="btn btn-secondary" previousStep>Back</button>

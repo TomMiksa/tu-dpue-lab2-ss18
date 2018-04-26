@@ -1,10 +1,8 @@
 import {Injectable} from '@angular/core';
-import {ResearcherModel} from "./researcher.model";
-import {RepoModel} from "./repo.model";
-import {FileModel} from "./file.model";
-import {HttpClient} from '@angular/common/http';
-import {LicenseModel} from "./license.model";
-
+import {ResearcherModel} from './researcher.model';
+import {RepoModel} from './repo.model';
+import {FileModel} from './file.model';
+import {LicenseModel} from './license.model';
 
 
 @Injectable()
@@ -14,26 +12,26 @@ export class PDFService {
   }
 
   public buildTableBody(inputfilemodel: FileModel, outputfilemodel: FileModel) {
-    var body = [];
+    const body = [];
 
 
     body.push(['Name', 'MimeType', 'Amount', 'Size', 'Total Size', 'Input/Output']);
 
-    var dataRow = [];
-    dataRow.push(inputfilemodel.file.name)
+    let dataRow = [];
+    dataRow.push(inputfilemodel.file.name);
     dataRow.push(inputfilemodel.mimeType);
     dataRow.push(inputfilemodel.amount);
     dataRow.push((inputfilemodel.file.size / 1000).toFixed(2) + ' kBytes');
     dataRow.push(((inputfilemodel.file.size / 1000) * inputfilemodel.amount).toFixed(2) + ' kBytes');
-    dataRow.push('Input')
+    dataRow.push('Input');
     body.push(dataRow);
     dataRow = [];
-    dataRow.push(outputfilemodel.file.name)
+    dataRow.push(outputfilemodel.file.name);
     dataRow.push(outputfilemodel.mimeType);
     dataRow.push(outputfilemodel.amount);
     dataRow.push((outputfilemodel.file.size / 1000).toFixed(2) + ' kBytes');
     dataRow.push(((outputfilemodel.file.size / 1000) * outputfilemodel.amount).toFixed(2) + ' kBytes');
-    dataRow.push('Output')
+    dataRow.push('Output');
     body.push(dataRow);
 
 
@@ -50,42 +48,37 @@ export class PDFService {
   }
 
   public buildResearcher(selectedResearcher: ResearcherModel) {
-    var researcher = [];
-    var researcherString = '';
-    if(selectedResearcher.preceding_titles){
+    const researcher = [];
+    let researcherString = '';
+    if (selectedResearcher.preceding_titles) {
       researcherString += (selectedResearcher.preceding_titles + ' ');
     }
-    if(selectedResearcher.firstname){
+    if (selectedResearcher.firstname) {
       researcherString += (selectedResearcher.firstname +  ' ');
     }
-    if(selectedResearcher.lastname){
-      researcherString += (selectedResearcher.lastname + ', ');
+    if (selectedResearcher.lastname) {
+      researcherString += (selectedResearcher.lastname);
     }
-    if(selectedResearcher.postpositioned_titles){
-      researcherString += (selectedResearcher.postpositioned_titles);
-    }
-    if(selectedResearcher.id){
-      researcherString += (selectedResearcher.id);
-    }else{
-      console.log('NICHT DA');
+    if (selectedResearcher.postpositioned_titles) {
+      researcherString += (', ' + selectedResearcher.postpositioned_titles);
     }
 
-    researcher.push({text: researcherString})
-    if(selectedResearcher.main_email) {
+    researcher.push({text: researcherString});
+    if (selectedResearcher.main_email) {
       researcher.push(
         {
           text: 'Email-address: ' + selectedResearcher.main_email
         }
       );
     }
-    if(selectedResearcher.main_phone_number) {
+    if (selectedResearcher.main_phone_number) {
       researcher.push(
         {
           text: 'Phone number: ' + selectedResearcher.main_phone_number
         }
       );
     }
-    if(selectedResearcher.employee) {
+    if (selectedResearcher.employee) {
       if (selectedResearcher.employee.employment.organisational_unit) {
       }
       researcher.push(
@@ -98,35 +91,36 @@ export class PDFService {
   }
 
   public repositoryBuilder(selectedRepository: RepoModel) {
-    var repository = [];
+    const repository = [];
 
     repository.push({text: 'For this project the following repository has been chosen to preserve the outputs of the project: \n' });
-    for(let i of selectedRepository.repository_metadata.name) {
+    for (const i of selectedRepository.repository_metadata.name) {
       if (i.name) {
-        repository.push({text: 'Name: ' + i.name + '\n'})
+        repository.push({text: 'Name: ' + i.name + '\n'});
       }
       if (i.acronym) {
         repository.push({text: 'Acronym: ' + i.acronym + '\n'});
       }
     }
-    if(selectedRepository.repository_metadata.description){
+    if (selectedRepository.repository_metadata.description) {
       repository.push({text: 'Description: ' + selectedRepository.repository_metadata.description + '\n'});
     }
-    if(selectedRepository.repository_metadata.url){
-      repository.push({text: 'More information about the repository can be found at: ' + selectedRepository.repository_metadata.url + '\n'});
+    if (selectedRepository.repository_metadata.url) {
+      repository.push({text: 'More information about the repository can be found at: '
+        + selectedRepository.repository_metadata.url + '\n'});
     }
     return repository;
   }
 
-  public buildLicense(selectedLicense: LicenseModel){
-    var license = [];
+  public buildLicense(selectedLicense: LicenseModel) {
+    const license = [];
     license.push({text: 'For this project, the artifacts and data will be licensed under the following license: \n' });
-    if(selectedLicense.name && selectedLicense.key){
+    if (selectedLicense.name && selectedLicense.key) {
       license.push({text: 'Name: ' + selectedLicense.name + ' (' +  selectedLicense.key + ') \n' });
-    }else if(selectedLicense.name){
+    } else if (selectedLicense.name) {
       license.push({text: 'Name: ' + selectedLicense.name + '\n' });
     }
-    if(selectedLicense.description){
+    if (selectedLicense.description) {
       license.push({text: selectedLicense.description + '\n'});
     }
     license.push({text: 'For more information about the selected license, visit: ' +  selectedLicense.url + '\n'});
