@@ -85,7 +85,7 @@ export class OpenDoarService {
       // FIXME a limit higher than 30 causes an internal server error,
       // but this could mean that there are less than 3 options for the user
       this.getCountryCode().then((country) => {
-        this.http.get('/opendoar?api-key=45E885A2-4336-11E8-951F-3A1257C617BB&limit=30'
+        this.http.get('/opendoar?api-key=45E885A2-4336-11E8-951F-3A1257C617BB&limit=20'
           + '&item-type=repository&format=Json&filter=[[\"country\",\"equals\",\"' + country + '\"]]').subscribe(
           (repoData: any) => {
             if (!!repoData && !!repoData.items && repoData.items.length > 0) {
